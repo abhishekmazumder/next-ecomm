@@ -31,7 +31,7 @@ const Layout = ({ title, children }) => {
           </nav>
         </header>
 
-        <main className="container m-auto px-8">{children}</main>
+        <main className="container m-auto px-8 py-8">{children}</main>
 
         <footer className="flex justify-center items-center h-10 shadow-inner">
           CopyRight &copy; 2023
