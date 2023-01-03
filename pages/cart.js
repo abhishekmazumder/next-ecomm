@@ -2,12 +2,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import dynamic from 'next/dynamic';
 
 import Layout from '../components/Layout';
 import { StoreContext } from '../utils/Store';
 import { useRouter } from 'next/router';
 
-export default function CartScreen() {
+function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(StoreContext);
   const {
@@ -110,3 +111,5 @@ export default function CartScreen() {
     </Layout>
   );
 }
+
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });
