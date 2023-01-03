@@ -26,7 +26,7 @@ const Layout = ({ title, children }) => {
       <div className="flex flex-col min-h-screen justify-between">
         <header>
           <nav className="flex h-12 px-8 justify-between shadow-md items-center">
-            <Link href="/" className="text-lg font-bold">
+            <Link href="/" className="text-2xl font-bold">
               Next-Ecomm
             </Link>
             <div>
