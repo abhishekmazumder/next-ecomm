@@ -7,7 +7,7 @@
 }
 
 .primary-btn {
-  @apply rounded bg-gray-500 px-4 py-2 text-white shadow outline-none hover:bg-gray-400;
+  @apply rounded bg-gray-500 px-6 py-2 text-white shadow outline-none hover:bg-gray-400;
 }
 
 input,
