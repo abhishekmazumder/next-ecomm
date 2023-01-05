@@ -1,20 +1,32 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
-import data from '../../utils/data';
+import Product from '../../models/Product';
+import db from '../../utils/db';
 import { StoreContext } from '../../utils/Store';
 
-const ProductScreen = () => {
+// import data from '../../utils/data';
+
+const ProductScreen = (props) => {
+  const { product } = props;
   const { state, dispatch } = useContext(StoreContext);
   const router = useRouter();
-  const { query } = useRouter();
-  const { slug } = query;
-  const product = data.products.find((x) => x.slug === slug);
+
+  // PRODUCT DETAILS LOADING FROM STATIC DATA.JS FILE
+  // const { query } = useRouter();
+  // const { slug } = query;
+  // const product = data.products.find((x) => x.slug === slug);
 
   if (!product) {
-    return <div>Product not found!</div>;
+    return (
+      <Layout title="Product not found">
+        <h1 className="text-2xl text-red-600 text-center font-bold">
+          Product not found!
+        </h1>
+      </Layout>
+    );
   }
 
   const addToCartHandler = () => {
@@ -25,7 +37,7 @@ const ProductScreen = () => {
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
-    router.push("/cart")
+    router.push('/cart');
   };
 
   return (
@@ -78,3 +90,16 @@ const ProductScreen = () => {
 };
 
 export default ProductScreen;
+
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: product ? db.convertDocToObj(product) : null,
+    },
+  };
+}
