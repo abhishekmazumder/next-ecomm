@@ -7,6 +7,8 @@ import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import { StoreContext } from '../utils/Store';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function CartScreen() {
   const router = useRouter();
@@ -21,17 +23,22 @@ function CartScreen() {
   };
 
   //UPDATE ITEM QUANTITY IN CART
-  const updateCartHandler = (item, qty) => {
+  const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.countInStock < quantity) {
+      return toast.error('Sorry, this item is out of stock.');
+    }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+    toast.success('Product updated in the cart');
   };
 
   return (
     <Layout title="Shopping Cart">
-      <h1 className="mb-4 text-xl py-2">Shopping Cart</h1>
+      <h1 className="mb-10 text-center text-2xl py-2">Shopping Cart</h1>
       {cartItems.length === 0 ? (
-        <div>
-          Cart is empty. <Link href="/">Go shopping</Link>
+        <div className='text-center'>
+          Cart is empty. <Link href="/" className='text-blue-600'>Go shopping</Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
