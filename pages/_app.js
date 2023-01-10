@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 // import type { AppProps } from 'next/app'
 
 export default function App({
@@ -12,13 +13,15 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <StoreProvider>
-        {Component.auth ? (
-          <Auth>
+        <PayPalScriptProvider deferLoading={true}>
+          {Component.auth ? (
+            <Auth>
+              <Component {...pageProps} />
+            </Auth>
+          ) : (
             <Component {...pageProps} />
-          </Auth>
-        ) : (
-          <Component {...pageProps} />
-        )}
+          )}
+        </PayPalScriptProvider>
       </StoreProvider>
     </SessionProvider>
   );
